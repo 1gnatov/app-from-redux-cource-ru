@@ -18,10 +18,19 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
-  module: { //Обновлено
-    loaders: [ //добавили babel-loader
+  module: {
+    preLoaders: [ //добавили ESlint в preloaders
       {
-        loaders: ['babel-loader'],
+        test: /\.js$/,
+        loaders: ['eslint'],
+        include: [
+          path.resolve(__dirname, "src"),
+        ],
+      }
+    ],
+    loaders: [ //все остальное осталось не тронутым
+      {
+        loaders: ['react-hot', 'babel-loader'],
         include: [
           path.resolve(__dirname, "src"),
         ],
