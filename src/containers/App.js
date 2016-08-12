@@ -1,22 +1,33 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import User from '../components/User'
+import Page from '../components/Page'
+import * as pageActions from '../actions/PageActions'
 
-export default class App extends Component {
+class App extends Component {
   render() {
-    const { name } = this.props.user
-    const { year, photos } = this.props.page
-    return <div>
-      <p>Привет из App, {name}!</p>
-      <p>У тебя {photos.length} фото за {year} год</p>
-     </div>
+    const { user, page } = this.props
+    const { getPhotos } = this.props.pageActions
+
+    return <div className='row'>
+      <Page photos={page.photos} year={page.year} getPhotos={getPhotos} fetching={page.fetching}/>
+      <User name={user.name} />
+    </div>
   }
 }
 
-function mapStateToProps (state) {
-	return {
-		user: state.user,
+function mapStateToProps(state) {
+  return {
+    user: state.user,
     page: state.page
-	}
+  }
 }
 
-export default connect(mapStateToProps)(App)
+function mapDispatchToProps(dispatch) {
+  return {
+    pageActions: bindActionCreators(pageActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
